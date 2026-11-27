@@ -1,11 +1,12 @@
 import sharp from 'sharp';
-import { mkdir, access } from 'node:fs/promises';
+import { mkdir, access, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const output = fileURLToPath(new URL('../public/frames/', import.meta.url));
 const force = process.argv.includes('--force');
 const width = 1280, height = 720;
+const logo = (await readFile(new URL('../public/heavenly-events-logo.png', import.meta.url))).toString('base64');
 await mkdir(output, { recursive: true });
 
 // Do not silently replace footage. Generated assets are a stylized spatial
@@ -60,8 +61,9 @@ function scene(frame) {
   s += arch(37.7,3.35,6.7,'#ddc588',2);
   const sofaA = project(-1.5,.4,36), sofaB=project(1.5,1.4,36);
   s += `<rect x="${sofaA[0]}" y="${sofaB[1]}" width="${sofaB[0]-sofaA[0]}" height="${sofaA[1]-sofaB[1]}" rx="10" fill="#dfd4b7" stroke="#baa164" stroke-width="3"/>`;
-  const emblem = project(0,4.3,37);
-  s += `<text x="${emblem[0]}" y="${emblem[1]}" fill="#e8d39a" text-anchor="middle" font-family="Georgia,serif" font-size="${focal/(42-camera)*1.1}" font-style="italic">he</text>`;
+  const emblem = project(-3,6.8,37);
+  const emblemSize = focal/(42-camera)*6;
+  s += `<image x="${emblem[0]}" y="${emblem[1]}" width="${emblemSize}" height="${emblemSize}" href="data:image/png;base64,${logo}"/>`;
   // Render distant architecture before nearby architecture for correct occlusion.
   for(let z=34;z>=2;z-=4) {
     if(z-camera < 1.4) continue;

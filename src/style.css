@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+.splash-logo{display:block;width:min(260px,65vw);height:auto;object-fit:contain}
+
 .brand .brand-logo{display:block;width:180px;height:90px;object-fit:cover;object-position:center;border-radius:2px}
 @media(max-width:600px){.brand .brand-logo{width:120px;height:60px}}
 @media(max-height:560px) and (min-width:601px){.brand .brand-logo{width:104px;height:52px}}
