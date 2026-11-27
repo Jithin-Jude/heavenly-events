@@ -14,7 +14,6 @@ const loader = createPreloader({
   onFrame: () => sequence?.invalidate(),
   onProgress({ settled }) {
     document.querySelector('#loader-fill').style.width = `${Math.min(settled / 15 * 100, 100)}%`;
-    document.querySelector('#loader-label').textContent = `Preparing ${Math.min(settled, 15)} of 15 opening frames`;
   },
 });
 sequence = createCanvasSequence(document.querySelector('#sequence'), loader.frames);
