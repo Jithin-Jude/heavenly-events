@@ -8,22 +8,13 @@ setupForm(document.querySelector('#enquiry-form'));
 document.querySelector('#year').textContent = new Date().getFullYear();
 
 const loaderElement = document.querySelector('#preloader');
-const background = document.querySelector('#background-progress');
 loaderElement.hidden = false;
-background.hidden = false;
 let sequence;
 const loader = createPreloader({
   onFrame: () => sequence?.invalidate(),
-  onProgress({ settled, loaded, failed, total }) {
-    const percent = Math.round(loaded / total * 100);
+  onProgress({ settled }) {
     document.querySelector('#loader-fill').style.width = `${Math.min(settled / 15 * 100, 100)}%`;
     document.querySelector('#loader-label').textContent = `Preparing ${Math.min(settled, 15)} of 15 opening frames`;
-    document.querySelector('#background-label').textContent = `Loaded ${percent}%${failed ? ' · fallback active' : ''}`;
-    document.querySelector('#background-fill').style.width = `${percent}%`;
-    if (settled === total && !failed) background.hidden = true;
-    if (settled === total && failed) {
-      document.querySelector('#background-label').textContent = loaded ? 'Preview ready · some imagery unavailable' : 'Imagery unavailable · explore below';
-    }
   },
 });
 sequence = createCanvasSequence(document.querySelector('#sequence'), loader.frames);
